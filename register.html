@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register - SIMS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="auth-container">
+<section class="auth-card">
+    <div class="rem">
+<h1>SIMS </h1><h1>||</h1>
+<p style="color: gray;"> Stock Inventory Management System</p>
+</div><br>
+<h2>Create Account</h2><br>
+
+<form id="registerForm">
+
+<div class="form-group">
+<label for="fullName">👤Full Name</label>
+<input type="text" id="fullName" placeholder="👤enter your fullName" required>
+</div>
+
+<div class="form-group">
+<label for="email">📨Email</label>
+<input type="email" id="email" placeholder=" 📨enter your email" required>
+</div>
+
+<div class="form-group">
+<label for="password">🔒Password</label>
+<input type="password" id="password" placeholder="🔒enter your Password" required>
+</div>
+
+<div class="form-group">
+<label for="confirmPassword">🔐Confirm Password</label>
+<input type="password" id="confirmPassword" placeholder="🔐Confirm your Password">
+</div>
+
+<div id="registerMessage" class="message"></div>
+
+<button type="submit" class="btn-primary">Register</button>
+
+<p>Already have account? <a href="login.html">Login</a></p>
+
+</form>
+</section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

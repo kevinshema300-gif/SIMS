@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard - SIMS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+<h1>SIMS – Stock Inventory Management System</h1>
+<div>
+<span id="userDisplay"></span>
+<button id="logoutBtn" class="btn-danger">Logout</button>
+</div>
+</header>
+
+<div class="layout">
+
+<aside id="sidebar" class="sidebar">
+<nav>
+<ul>
+<li>📊 Dashboard</li>
+<li>📦 Products</li>
+<li>📄 Reports</li>
+<li>⚙ Settings</li>
+</ul>
+</nav>
+</aside>
+
+<main class="main">
+
+<section class="cards">
+<div class="card">
+<h3>Total Products</h3>
+<p id="totalProducts">0</p>
+</div>
+
+<div class="card">
+<h3>In Stock</h3>
+<p id="inStock">0</p>
+</div>
+
+<div class="card">
+<h3>Out of Stock</h3>
+<p id="outStock">0</p>
+</div>
+</section>
+
+<section class="product-section">
+
+<div class="product-header">
+<h2>Products</h2>
+<button id="addBtn" class="btn-primary">Add Product</button>
+</div>
+
+<form id="productForm" class="hidden">
+<input type="hidden" id="editIndex">
+
+<label for="productName">Product Name</label>
+<input type="text" id="productName">
+
+<label for="category">Category</label>
+<input type="text" id="category">
+
+<label for="quantity">Quantity (kg)</label>
+<input type="number" id="quantity">
+
+<label for="price">Price ($)</label>
+<input type="number" id="price">
+
+<div id="productMessage" class="message"></div>
+
+<button type="submit" class="btn-primary">Save Product</button>
+</form>
+
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Category</th>
+<th>Qty (kg)</th>
+<th>Price ($)</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="productTable"></tbody>
+</table>
+
+<div id="emptyState" class="empty">No products available</div>
+
+</section>
+
+</main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
