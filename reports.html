@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - SIMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="facebook-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="loading-text">Loading reports...</div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- SIMS Branding -->
+        <div class="sims-brand">
+            <div class="sims-brand-logo"><i class="fas fa-cubes"></i></div>
+            <div class="sims-brand-text"><h2>SIMS</h2><p><span>Stock</span> Inventory System</p></div>
+        </div>
+
+        <!-- Hamburger Menu -->
+        <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
+
+        <!-- Hidden Navigation -->
+        <div class="hidden-nav" id="hiddenNav">
+            <div class="hidden-nav-header"><h3><i class="fas fa-compass"></i> Navigation</h3></div>
+            <ul>
+                <li data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li data-page="products"><i class="fas fa-box"></i> Products</li>
+                <li class="active" data-page="reports"><i class="fas fa-chart-bar"></i> Reports</li>
+                <li data-page="settings"><i class="fas fa-cog"></i> Settings</li>
+                <li class="logout-item" id="hiddenLogout"><i class="fas fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header"><h2><i class="fas fa-cubes"></i> SIMS</h2><p>Inventory</p></div>
+            <ul class="sidebar-nav">
+                <li data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li data-page="products"><i class="fas fa-box"></i> Products</li>
+                <li class="active" data-page="reports"><i class="fas fa-chart-bar"></i> Reports</li>
+                <li data-page="settings"><i class="fas fa-cog"></i> Settings</li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="sidebarAvatar"><i class="fas fa-user"></i></div>
+                    <div class="user-details">
+                        <span class="user-name" id="sidebarUserName">User</span>
+                        <span class="user-email" id="sidebarUserEmail">user@email.com</span>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title"><h1>Reports</h1><p>Analytics & Insights</p></div>
+                <div class="header-actions">
+                    <div class="notification-badge"><i class="fas fa-bell"></i><span class="badge" id="notificationCount">0</span></div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-image" id="profileImage"><i class="fas fa-user"></i></div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="#" id="viewProfile"><i class="fas fa-user-circle"></i> Profile</a>
+                            <a href="#" id="uploadPhoto"><i class="fas fa-camera"></i> Upload Photo</a>
+                            <a href="#" id="goToSettings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#" id="profileLogout" class="logout-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Reports Content -->
+            <div class="reports-dashboard">
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="background:#667eea20;color:#667eea"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="kpi-info">
+                            <h3>Total Revenue</h3>
+                            <div class="kpi-value" id="totalRevenue">$0</div>
+                            <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> <span id="revenueChange">+12.5%</span></div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="background:#27ae6020;color:#27ae60"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="kpi-info">
+                            <h3>Total Orders</h3>
+                            <div class="kpi-value" id="totalOrders">0</div>
+                            <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> <span id="ordersChange">+8.2%</span></div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="background:#f39c1220;color:#f39c12"><i class="fas fa-boxes"></i></div>
+                        <div class="kpi-info">
+                            <h3>Avg Order Value</h3>
+                            <div class="kpi-value" id="avgOrderValue">$0</div>
+                            <div class="kpi-trend positive"><i class="fas fa-arrow-up"></i> <span id="avgChange">+5.3%</span></div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon" style="background:#e74c3c20;color:#e74c3c"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="kpi-info">
+                            <h3>Low Stock</h3>
+                            <div class="kpi-value" id="lowStockCount">0</div>
+                            <div class="kpi-trend negative"><i class="fas fa-arrow-down"></i> <span id="lowStockChange">-2.1%</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-row">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-line"></i> Revenue Trend</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn active" data-period="daily">Daily</button>
+                                <button class="chart-btn" data-period="weekly">Weekly</button>
+                                <button class="chart-btn" data-period="monthly">Monthly</button>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="revenueChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header"><h3><i class="fas fa-chart-pie"></i> Category Distribution</h3></div>
+                        <div class="chart-body">
+                            <canvas id="categoryChart" height="250"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header"><h3><i class="fas fa-chart-bar"></i> Stock Status</h3></div>
+                        <div class="chart-body">
+                            <canvas id="stockChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export -->
+                <div class="export-section">
+                    <h3><i class="fas fa-download"></i> Export Reports</h3>
+                    <div class="export-buttons">
+                        <button class="export-btn" id="exportPDF"><i class="fas fa-file-pdf"></i> PDF</button>
+                        <button class="export-btn" id="exportExcel"><i class="fas fa-file-excel"></i> Excel</button>
+                        <button class="export-btn" id="exportCSV"><i class="fas fa-file-csv"></i> CSV</button>
+                        <button class="export-btn" id="printReport"><i class="fas fa-print"></i> Print</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer"><p>© 2024 <span>SIMS</span> — Reports</p></footer>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

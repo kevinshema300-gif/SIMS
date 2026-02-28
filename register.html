@@ -1,52 +1,489 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Register - SIMS</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SIMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles for register page */
+        .auth-page {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            position: relative;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .auth-container {
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary) var(--gray-200);
+        }
+
+        .auth-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .auth-container::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 10px;
+        }
+
+        .auth-container::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 10px;
+        }
+
+        .auth-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        .floating-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .dot {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .dot-1 {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .dot-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .dot-3 {
+            width: 100px;
+            height: 100px;
+            top: 50%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        .password-strength-meter {
+            margin-top: 10px;
+            padding: 15px;
+            background: var(--gray-100);
+            border-radius: var(--radius-lg);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: var(--gray-300);
+            border-radius: 2px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .strength-progress {
+            height: 100%;
+            width: 0%;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-progress.weak {
+            width: 25%;
+            background: var(--danger);
+        }
+
+        .strength-progress.fair {
+            width: 50%;
+            background: var(--warning);
+        }
+
+        .strength-progress.good {
+            width: 75%;
+            background: var(--primary);
+        }
+
+        .strength-progress.strong {
+            width: 100%;
+            background: var(--success);
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: var(--gray-600);
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .requirement-item.valid {
+            color: var(--success);
+        }
+
+        .requirement-item i {
+            width: 18px;
+            font-size: 14px;
+        }
+    </style>
 </head>
-<body>
+<body class="auth-page">
+    <!-- Floating Dots Background -->
+    <div class="floating-dots">
+        <div class="dot dot-1"></div>
+        <div class="dot dot-2"></div>
+        <div class="dot dot-3"></div>
+    </div>
 
-<main class="auth-container">
-<section class="auth-card">
-    <div class="rem">
-<h1>SIMS </h1><h1>||</h1>
-<p style="color: gray;"> Stock Inventory Management System</p>
-</div><br>
-<h2>Create Account</h2><br>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="facebook-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="loading-text">Creating account...</div>
+    </div>
 
-<form id="registerForm">
+    <!-- Register Container -->
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <h1 class="gradient-text">SIMS</h1>
+            <p>Stock Inventory Management System</p>
+        </div>
+        
+        <div class="auth-body">
+            <div class="auth-welcome">
+                <h2>Create Account 🚀</h2>
+                <p class="auth-subtitle">Join us to manage your inventory efficiently</p>
+            </div>
+            
+            <div id="errorMessage" class="message hidden">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText"></span>
+            </div>
+            
+            <div id="successMessage" class="message success hidden">
+                <i class="fas fa-check-circle"></i>
+                <span id="successText"></span>
+            </div>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="input-group animate-input">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="regName" placeholder=" " required>
+                    <label>Full Name</label>
+                    <div class="input-border"></div>
+                </div>
+                
+                <div class="input-group animate-input">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="regEmail" placeholder=" " required>
+                    <label>Email Address</label>
+                    <div class="input-border"></div>
+                </div>
+                
+                <div class="input-group animate-input">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="regPassword" placeholder=" " required>
+                    <label>Password</label>
+                    <div class="input-border"></div>
+                    <button type="button" class="password-toggle" onclick="togglePassword('regPassword')">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
 
-<div class="form-group">
-<label for="fullName">👤Full Name</label>
-<input type="text" id="fullName" placeholder="👤enter your fullName" required>
-</div>
+                <!-- Password Strength Meter -->
+                <div class="password-strength-meter" id="passwordMeter" style="display: none;">
+                    <div class="strength-bar">
+                        <div class="strength-progress" id="strengthProgress"></div>
+                    </div>
+                    <div class="requirement-list">
+                        <div class="requirement-item" id="reqLength">
+                            <i class="far fa-circle"></i>
+                            <span>At least 8 characters</span>
+                        </div>
+                        <div class="requirement-item" id="reqUppercase">
+                            <i class="far fa-circle"></i>
+                            <span>One uppercase letter</span>
+                        </div>
+                        <div class="requirement-item" id="reqLowercase">
+                            <i class="far fa-circle"></i>
+                            <span>One lowercase letter</span>
+                        </div>
+                        <div class="requirement-item" id="reqNumber">
+                            <i class="far fa-circle"></i>
+                            <span>One number</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group animate-input">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="regConfirmPassword" placeholder=" " required>
+                    <label>Confirm Password</label>
+                    <div class="input-border"></div>
+                    <button type="button" class="password-toggle" onclick="togglePassword('regConfirmPassword')">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+                
+                <div class="terms-container">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="termsCheck">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">
+                            I agree to the <a href="#" onclick="showToast('Terms of Service', 'info'); return false;">Terms</a> 
+                            and <a href="#" onclick="showToast('Privacy Policy', 'info'); return false;">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="registerBtn">
+                    <span>Create Account</span>
+                    <i class="fas fa-user-plus"></i>
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign In</a></p>
+            </div>
+            
+            <div class="auth-divider">
+                <span>or sign up with</span>
+            </div>
+            
+            <div class="social-login">
+                <button class="social-btn google" onclick="showToast('Google signup coming soon', 'info')">
+                    <i class="fab fa-google"></i>
+                </button>
+                <button class="social-btn github" onclick="showToast('GitHub signup coming soon', 'info')">
+                    <i class="fab fa-github"></i>
+                </button>
+                <button class="social-btn microsoft" onclick="showToast('Microsoft signup coming soon', 'info')">
+                    <i class="fab fa-microsoft"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
-<div class="form-group">
-<label for="email">📨Email</label>
-<input type="email" id="email" placeholder=" 📨enter your email" required>
-</div>
+    <script>
+        // Password visibility toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = event.currentTarget.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
 
-<div class="form-group">
-<label for="password">🔒Password</label>
-<input type="password" id="password" placeholder="🔒enter your Password" required>
-</div>
+        // Password strength checker
+        const passwordInput = document.getElementById('regPassword');
+        const passwordMeter = document.getElementById('passwordMeter');
+        const strengthProgress = document.getElementById('strengthProgress');
+        
+        passwordInput.addEventListener('focus', () => {
+            passwordMeter.style.display = 'block';
+        });
 
-<div class="form-group">
-<label for="confirmPassword">🔐Confirm Password</label>
-<input type="password" id="confirmPassword" placeholder="🔐Confirm your Password">
-</div>
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            
+            // Requirements
+            const length = password.length >= 8;
+            const uppercase = /[A-Z]/.test(password);
+            const lowercase = /[a-z]/.test(password);
+            const number = /[0-9]/.test(password);
+            
+            // Update requirement icons
+            updateRequirement('reqLength', length);
+            updateRequirement('reqUppercase', uppercase);
+            updateRequirement('reqLowercase', lowercase);
+            updateRequirement('reqNumber', number);
+            
+            // Calculate strength
+            const strength = [length, uppercase, lowercase, number].filter(Boolean).length;
+            
+            // Update strength bar
+            strengthProgress.className = 'strength-progress';
+            if (strength === 0) {
+                strengthProgress.style.width = '0%';
+            } else if (strength === 1) {
+                strengthProgress.classList.add('weak');
+            } else if (strength === 2) {
+                strengthProgress.classList.add('fair');
+            } else if (strength === 3) {
+                strengthProgress.classList.add('good');
+            } else if (strength === 4) {
+                strengthProgress.classList.add('strong');
+            }
+        });
 
-<div id="registerMessage" class="message"></div>
+        function updateRequirement(id, isValid) {
+            const element = document.getElementById(id);
+            const icon = element.querySelector('i');
+            
+            if (isValid) {
+                element.classList.add('valid');
+                icon.className = 'fas fa-check-circle';
+            } else {
+                element.classList.remove('valid');
+                icon.className = 'far fa-circle';
+            }
+        }
 
-<button type="submit" class="btn-primary">Register</button>
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirmPassword').value;
+            const terms = document.getElementById('termsCheck').checked;
+            
+            if (!name || !email || !password || !confirm) {
+                showMessage('errorMessage', 'All fields are required');
+                return;
+            }
+            
+            if (!terms) {
+                showMessage('errorMessage', 'You must accept the terms and conditions');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('errorMessage', 'Please enter a valid email address');
+                return;
+            }
+            
+            // Check if email exists
+            const users = JSON.parse(localStorage.getItem('sims_users')) || [];
+            if (users.some(u => u.email === email)) {
+                showMessage('errorMessage', 'Email already registered');
+                return;
+            }
+            
+            // Password validation
+            if (password.length < 8) {
+                showMessage('errorMessage', 'Password must be at least 8 characters');
+                return;
+            }
+            
+            if (!/[A-Z]/.test(password)) {
+                showMessage('errorMessage', 'Password must contain at least one uppercase letter');
+                return;
+            }
+            
+            if (!/[a-z]/.test(password)) {
+                showMessage('errorMessage', 'Password must contain at least one lowercase letter');
+                return;
+            }
+            
+            if (!/[0-9]/.test(password)) {
+                showMessage('errorMessage', 'Password must contain at least one number');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showMessage('errorMessage', 'Passwords do not match');
+                return;
+            }
+            
+            // Create user
+            users.push({
+                id: Date.now(),
+                fullName: name,
+                email: email,
+                password: password,
+                createdAt: new Date().toISOString()
+            });
+            
+            localStorage.setItem('sims_users', JSON.stringify(users));
+            
+            showMessage('successMessage', 'Registration successful! Redirecting to login...', true);
+            showLoading('Account created!');
+            
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        });
 
-<p>Already have account? <a href="login.html">Login</a></p>
+        // Show message function
+        function showMessage(elementId, message, isSuccess = false) {
+            const msgElement = document.getElementById(elementId);
+            if (!msgElement) return;
+            
+            const textSpan = msgElement.querySelector('span');
+            textSpan.textContent = message;
+            
+            msgElement.classList.remove('hidden', 'success');
+            if (isSuccess) msgElement.classList.add('success');
+            
+            // Auto hide error messages after 3 seconds
+            if (!isSuccess) {
+                setTimeout(() => {
+                    msgElement.classList.add('hidden');
+                }, 3000);
+            }
+        }
 
-</form>
-</section>
-</main>
+        // Show loading function
+        function showLoading(message) {
+            const overlay = document.getElementById('loadingOverlay');
+            const textEl = overlay.querySelector('.loading-text');
+            textEl.textContent = message;
+            overlay.classList.remove('hidden');
+        }
 
-<script src="app.js"></script>
+        // Show toast function (to be implemented in script.js)
+        function showToast(message, type) {
+            console.log(message, type);
+        }
+    </script>
+
+    <script src="script.js"></script>
 </body>
 </html>

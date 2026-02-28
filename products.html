@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SIMS</title>
+    <title>Products - SIMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,37 +15,25 @@
             <div></div>
             <div></div>
         </div>
-        <div class="loading-text">Loading dashboard...</div>
+        <div class="loading-text">Loading products...</div>
     </div>
 
-    <!-- Dashboard Container -->
     <div class="dashboard-container">
         <!-- SIMS Branding -->
         <div class="sims-brand">
-            <div class="sims-brand-logo">
-                <i class="fas fa-cubes"></i>
-            </div>
-            <div class="sims-brand-text">
-                <h2>SIMS</h2>
-                <p><span>Stock</span> Inventory Management System</p>
-            </div>
+            <div class="sims-brand-logo"><i class="fas fa-cubes"></i></div>
+            <div class="sims-brand-text"><h2>SIMS</h2><p><span>Stock</span> Inventory System</p></div>
         </div>
 
         <!-- Hamburger Menu -->
-        <div class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+        <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
 
-        <!-- Hidden Navigation Menu -->
+        <!-- Hidden Navigation -->
         <div class="hidden-nav" id="hiddenNav">
-            <div class="hidden-nav-header">
-                <h3><i class="fas fa-compass"></i> Navigation Menu</h3>
-            </div>
+            <div class="hidden-nav-header"><h3><i class="fas fa-compass"></i> Navigation</h3></div>
             <ul>
-                <li class="active" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
-                <li data-page="products"><i class="fas fa-box"></i> Products</li>
+                <li data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li class="active" data-page="products"><i class="fas fa-box"></i> Products</li>
                 <li data-page="reports"><i class="fas fa-chart-bar"></i> Reports</li>
                 <li data-page="settings"><i class="fas fa-cog"></i> Settings</li>
                 <li class="logout-item" id="hiddenLogout"><i class="fas fa-sign-out-alt"></i> Logout</li>
@@ -54,13 +42,10 @@
 
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-cubes"></i> SIMS</h2>
-                <p>Inventory Management</p>
-            </div>
+            <div class="sidebar-header"><h2><i class="fas fa-cubes"></i> SIMS</h2><p>Inventory</p></div>
             <ul class="sidebar-nav">
-                <li class="active" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
-                <li data-page="products"><i class="fas fa-box"></i> Products</li>
+                <li data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li class="active" data-page="products"><i class="fas fa-box"></i> Products</li>
                 <li data-page="reports"><i class="fas fa-chart-bar"></i> Reports</li>
                 <li data-page="settings"><i class="fas fa-cog"></i> Settings</li>
             </ul>
@@ -68,7 +53,7 @@
                 <div class="user-info">
                     <div class="user-avatar" id="sidebarAvatar"><i class="fas fa-user"></i></div>
                     <div class="user-details">
-                        <span class="user-name" id="sidebarUserName">User Name</span>
+                        <span class="user-name" id="sidebarUserName">User</span>
                         <span class="user-email" id="sidebarUserEmail">user@email.com</span>
                     </div>
                 </div>
@@ -78,21 +63,14 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header -->
             <header class="content-header">
-                <div class="header-title">
-                    <h1 id="pageTitle">Dashboard</h1>
-                    <p id="welcomeMessage">Welcome back!</p>
-                </div>
+                <div class="header-title"><h1>Products</h1><p>Manage your inventory</p></div>
                 <div class="header-actions">
-                    <div class="notification-badge" id="notificationBell">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge" id="notificationCount">0</span>
-                    </div>
+                    <div class="notification-badge"><i class="fas fa-bell"></i><span class="badge" id="notificationCount">0</span></div>
                     <div class="profile-dropdown" id="profileDropdown">
                         <div class="profile-image" id="profileImage"><i class="fas fa-user"></i></div>
                         <div class="dropdown-menu" id="dropdownMenu">
-                            <a href="#" id="viewProfile"><i class="fas fa-user-circle"></i> My Profile</a>
+                            <a href="#" id="viewProfile"><i class="fas fa-user-circle"></i> Profile</a>
                             <a href="#" id="uploadPhoto"><i class="fas fa-camera"></i> Upload Photo</a>
                             <a href="#" id="goToSettings"><i class="fas fa-cog"></i> Settings</a>
                             <a href="#" id="profileLogout" class="logout-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -101,67 +79,55 @@
                 </div>
             </header>
 
-            <!-- Dashboard Content -->
-            <div id="dashboardContent">
-                <div class="cards-container">
-                    <div class="card">
-                        <div class="card-icon"><i class="fas fa-boxes"></i></div>
-                        <h3>Total Products</h3>
-                        <div class="card-value" id="totalProducts">0</div>
-                        <div class="card-stats"><i class="fas fa-arrow-up"></i> <span>All time</span></div>
+            <!-- Products Content -->
+            <div class="products-section full-width">
+                <div class="section-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-boxes"></i> All Products</h2>
+                        <div class="product-stats">
+                            <span class="stat-item"><i class="fas fa-box"></i> <span id="totalProductsCount">0</span> Total</span>
+                            <span class="stat-item"><i class="fas fa-check-circle" style="color:#27ae60"></i> <span id="inStockCount">0</span> In Stock</span>
+                            <span class="stat-item"><i class="fas fa-times-circle" style="color:#e74c3c"></i> <span id="outStockCount">0</span> Out</span>
+                        </div>
                     </div>
-                    <div class="card">
-                        <div class="card-icon"><i class="fas fa-check-circle"></i></div>
-                        <h3>In Stock</h3>
-                        <div class="card-value" id="inStockProducts">0</div>
-                        <div class="card-stats"><i class="fas fa-chart-line"></i> <span id="inStockPercent">0%</span></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon"><i class="fas fa-times-circle"></i></div>
-                        <h3>Out of Stock</h3>
-                        <div class="card-value" id="outStockProducts">0</div>
-                        <div class="card-stats"><i class="fas fa-chart-line"></i> <span id="outStockPercent">0%</span></div>
+                    <div class="header-actions">
+                        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchProducts" placeholder="Search..."></div>
+                        <div class="filter-dropdown"><select id="categoryFilter"><option value="">All Categories</option></select></div>
+                        <button class="btn-add" id="addProductBtn"><i class="fas fa-plus"></i> Add</button>
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <h3><i class="fas fa-chart-line"></i> Inventory Overview</h3>
-                    <div class="chart-placeholder" id="chartPlaceholder">
-                        <div class="chart-bars" id="chartBars"></div>
-                    </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <tr><td colspan="7" class="loading-state"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="products-section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-box"></i> Recent Products</h2>
-                        <button class="btn-add" id="quickAddBtn"><i class="fas fa-plus"></i> Add Product</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>Qty</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recentProductsTable"></tbody>
-                        </table>
-                    </div>
+                <div class="pagination">
+                    <button class="page-btn" id="prevPage" disabled><i class="fas fa-chevron-left"></i></button>
+                    <span id="pageInfo">Page 1 of 1</span>
+                    <button class="page-btn" id="nextPage" disabled><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
         </main>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>© 2024 <span>SIMS</span> — Stock Inventory Management System</p>
-        </footer>
+        <footer class="footer"><p>© 2024 <span>SIMS</span> — Stock Inventory System</p></footer>
     </div>
 
-    <!-- Add Product Modal -->
+    <!-- Modals -->
     <div id="productModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -183,7 +149,6 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal hidden">
         <div class="modal-content" style="max-width:400px">
             <div class="modal-header" style="background:#e74c3c">
@@ -201,7 +166,6 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
     <div id="toast" class="toast hidden"></div>
 
     <script src="script.js"></script>

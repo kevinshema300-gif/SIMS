@@ -1,0 +1,2826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - SIMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #4895ef;
+            --secondary: #7209b7;
+            --secondary-light: #9d4edd;
+            --success: #06d6a0;
+            --success-dark: #05b588;
+            --warning: #ffb703;
+            --danger: #e63946;
+            --danger-dark: #c72a37;
+            --dark: #1e1e2f;
+            --darker: #151522;
+            --light: #f8f9fa;
+            --lighter: #ffffff;
+            --gray-100: #f1f3f5;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
+            --shadow: 0 4px 6px rgba(0,0,0,0.04);
+            --shadow-md: 0 6px 12px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.12);
+            --shadow-glow: 0 0 15px rgba(67, 97, 238, 0.3);
+            
+            --radius-sm: 6px;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===== GLOBAL SCROLLBAR STYLES ===== */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            border: 2px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-light));
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--gray-200);
+        }
+
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .facebook-loader {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .facebook-loader div {
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            animation: facebookLoader 1.2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .facebook-loader div:nth-child(2) {
+            animation-delay: 0.2s;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .facebook-loader div:nth-child(3) {
+            animation-delay: 0.4s;
+            background: rgba(255,255,255,0.8);
+        }
+
+        @keyframes facebookLoader {
+            0%, 100% { 
+                transform: scale(0.5); 
+                opacity: 0.3;
+                box-shadow: 0 0 10px rgba(255,255,255,0.2);
+            }
+            50% { 
+                transform: scale(1.2); 
+                opacity: 1;
+                box-shadow: 0 0 30px rgba(255,255,255,0.8);
+            }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== DASHBOARD LAYOUT ===== */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            background: var(--gray-100);
+            position: relative;
+        }
+
+        /* Main Content - Scrollable */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0 30px 80px;
+            transition: margin-left 0.3s ease;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--gray-200);
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 10px;
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            border: 2px solid var(--gray-200);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1a2639, #2c3e50);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 999;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar-header {
+            padding: 35px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .sidebar-header h2 i {
+            color: var(--primary-light);
+            font-size: 32px;
+        }
+
+        .sidebar-header p {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-nav li {
+            padding: 16px 25px;
+            margin: 5px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+        }
+
+        .sidebar-nav li i {
+            width: 22px;
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .sidebar-nav li:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(8px);
+        }
+
+        .sidebar-nav li.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar-footer {
+            padding: 0 20px 30px;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 18px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: var(--transition);
+        }
+
+        .user-info:hover {
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 600;
+            color: white;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .user-email {
+            font-size: 11px;
+            opacity: 0.6;
+            display: block;
+            word-break: break-all;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 14px;
+            background: rgba(230, 57, 70, 0.15);
+            color: #ff8a92;
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.3);
+        }
+
+        /* ===== HEADER ===== */
+        .content-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 18px 35px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            border-radius: 0 0 20px 20px;
+            border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            color: var(--gray-800);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header-title p {
+            color: var(--gray-600);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .notification-badge {
+            position: relative;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .notification-badge:hover {
+            background: var(--gray-200);
+            transform: scale(1.1);
+        }
+
+        .notification-badge i {
+            font-size: 24px;
+            color: var(--gray-600);
+        }
+
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 6px;
+            border-radius: 30px;
+            min-width: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(230,57,70,0.3);
+        }
+
+        .profile-dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(67,97,238,0.2);
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-image i {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 24px;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.1);
+            border-color: var(--secondary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 65px;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            width: 250px;
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            animation: dropdownFade 0.3s var(--transition-bounce);
+        }
+
+        @keyframes dropdownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .dropdown-menu a {
+            padding: 15px 22px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--gray-700);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--gray-100);
+            padding-left: 28px;
+        }
+
+        .dropdown-menu a i {
+            width: 22px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .dropdown-menu a.logout-item {
+            color: var(--danger);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .dropdown-menu a.logout-item i {
+            color: var(--danger);
+        }
+
+        /* ===== SIMS BRANDING ===== */
+        .sims-brand {
+            position: fixed;
+            top: 20px;
+            left: 300px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1001;
+            background: rgba(255,255,255,0.95);
+            padding: 12px 28px;
+            border-radius: 60px;
+            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+
+        .sims-brand:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl), 0 0 0 2px rgba(255,255,255,0.5);
+        }
+
+        .sims-brand-logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transform: rotate(10deg) scale(1);
+            transition: var(--transition-bounce);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .sims-brand:hover .sims-brand-logo {
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .sims-brand-text h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gray-800);
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .sims-brand-text p {
+            font-size: 12px;
+            color: var(--gray-600);
+            letter-spacing: 0.3px;
+        }
+
+        .sims-brand-text span {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* ===== HAMBURGER MENU ===== */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 55px;
+            height: 55px;
+            background: white;
+            border-radius: 16px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1002;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition-bounce);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-xl), 0 0 0 2px rgba(67, 97, 238, 0.3);
+        }
+
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+            width: 25px;
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -8px);
+            width: 25px;
+        }
+
+        /* ===== HIDDEN NAVIGATION ===== */
+        .hidden-nav {
+            position: fixed;
+            top: 95px;
+            left: 20px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow-xl);
+            width: 300px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+            z-index: 1000;
+            transform: translateX(-120%);
+            transition: transform 0.4s var(--transition-bounce);
+            opacity: 0;
+            visibility: hidden;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--gray-200);
+        }
+
+        .hidden-nav::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .hidden-nav::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 10px;
+        }
+
+        .hidden-nav::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .hidden-nav.show {
+            transform: translateX(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hidden-nav-header {
+            padding: 22px;
+            border-bottom: 1px solid var(--gray-200);
+            background: linear-gradient(135deg, var(--gray-100), white);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .hidden-nav-header h3 {
+            color: var(--gray-800);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hidden-nav-header h3 i {
+            color: var(--primary);
+            font-size: 22px;
+        }
+
+        .hidden-nav ul {
+            list-style: none;
+            padding: 12px;
+        }
+
+        .hidden-nav li {
+            padding: 16px 22px;
+            margin: 4px 0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--gray-700);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .hidden-nav li i {
+            width: 24px;
+            color: var(--primary);
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .hidden-nav li:hover {
+            background: var(--gray-100);
+            transform: translateX(8px);
+        }
+
+        .hidden-nav li.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .hidden-nav li.active i {
+            color: white;
+        }
+
+        .hidden-nav li.logout-item {
+            border-top: 2px solid var(--gray-200);
+            margin-top: 10px;
+            padding-top: 20px;
+            color: var(--danger);
+        }
+
+        .hidden-nav li.logout-item i {
+            color: var(--danger);
+        }
+
+        .hidden-nav li.logout-item:hover {
+            background: #fee;
+        }
+
+        /* ===== SETTINGS PAGE SPECIFIC STYLES ===== */
+        .settings-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Settings Header */
+        .settings-header {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+
+        .settings-header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .settings-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+        }
+
+        .settings-header-text h2 {
+            font-size: 28px;
+            color: var(--gray-800);
+            margin-bottom: 5px;
+        }
+
+        .settings-header-text p {
+            color: var(--gray-600);
+            font-size: 15px;
+        }
+
+        .settings-header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            padding: 14px 28px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-danger:hover {
+            background: var(--danger-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.3);
+        }
+
+        .btn-outline {
+            padding: 12px 24px;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+
+        .settings-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .settings-card-header {
+            padding: 20px 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .settings-card-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+        }
+
+        .settings-card-header i {
+            font-size: 22px;
+        }
+
+        .settings-card-body {
+            padding: 25px;
+        }
+
+        .settings-group {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .settings-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .settings-group h4 {
+            color: var(--gray-700);
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            flex: 1;
+        }
+
+        .settings-label strong {
+            display: block;
+            color: var(--gray-800);
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .settings-label small {
+            color: var(--gray-500);
+            font-size: 12px;
+        }
+
+        .settings-value {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, var(--success), #0bb5a0);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Select Input */
+        .settings-select {
+            padding: 8px 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 30px;
+            font-size: 14px;
+            color: var(--gray-700);
+            background: white;
+            cursor: pointer;
+            outline: none;
+            min-width: 120px;
+        }
+
+        .settings-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* Text Input */
+        .settings-input {
+            padding: 8px 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: 30px;
+            font-size: 14px;
+            width: 200px;
+            outline: none;
+        }
+
+        .settings-input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Color Picker */
+        .color-picker-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .color-option:hover {
+            transform: scale(1.2);
+        }
+
+        .color-option.selected {
+            border-color: white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            accent-color: var(--primary);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 8px 16px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: 30px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray-700);
+        }
+
+        .option-btn:hover {
+            background: var(--gray-200);
+        }
+
+        .option-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Danger Zone */
+        .danger-zone {
+            margin-top: 30px;
+            padding: 25px;
+            background: #fee;
+            border-radius: 20px;
+            border: 2px solid rgba(230, 57, 70, 0.2);
+        }
+
+        .danger-zone h4 {
+            color: var(--danger);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .danger-zone .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Profile Avatar Section */
+        .profile-avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--gray-100);
+            border-radius: 20px;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 600;
+            color: white;
+            box-shadow: var(--shadow-lg);
+            border: 4px solid white;
+        }
+
+        .profile-avatar-large img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .avatar-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Progress Bar */
+        .progress {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .storage-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray-600);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: white;
+            color: var(--gray-800);
+            padding: 16px 28px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-xl);
+            z-index: 9999;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid var(--success);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+        }
+
+        .toast.success {
+            border-left-color: var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.info {
+            border-left-color: var(--primary);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 18px 30px;
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 14px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: 280px;
+            z-index: 80;
+            transition: left 0.3s ease;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.02);
+        }
+
+        .footer span {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .footer i {
+            color: var(--danger);
+            margin: 0 4px;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .sims-brand {
+                left: 90px;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content,
+            .footer {
+                margin-left: 0;
+                left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sims-brand {
+                left: 90px;
+                padding: 10px 20px;
+            }
+            
+            .sims-brand-text p {
+                display: none;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding-top: 90px;
+            }
+            
+            .settings-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .settings-header-left {
+                flex-direction: column;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-avatar-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer {
+                left: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sims-brand {
+                left: 80px;
+                padding: 8px 15px;
+            }
+            
+            .main-content {
+                padding: 0 15px 80px;
+            }
+            
+            .settings-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .settings-value {
+                width: 100%;
+            }
+            
+            .settings-select,
+            .settings-input {
+                width: 100%;
+            }
+            
+            .toast {
+                left: 20px;
+                right: 20px;
+                min-width: auto;
+            }
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .dashboard-container {
+            background: #16213e;
+        }
+
+        body.dark-mode .sidebar {
+            background: linear-gradient(180deg, #0f0f1f, #1a1a2e);
+        }
+
+        body.dark-mode .content-header,
+        body.dark-mode .settings-card,
+        body.dark-mode .settings-header {
+            background: #1e293b;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .settings-header-text h2,
+        body.dark-mode .settings-header-text p {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .settings-group h4 {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .settings-label strong {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .settings-label small {
+            color: #94a3b8;
+        }
+
+        body.dark-mode .settings-select,
+        body.dark-mode .settings-input {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .profile-avatar-section {
+            background: #334155;
+        }
+
+        body.dark-mode .option-btn {
+            background: #334155;
+            color: #e2e8f0;
+            border-color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="facebook-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="loading-text">Loading settings...</div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- SIMS Branding -->
+        <div class="sims-brand">
+            <div class="sims-brand-logo">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <div class="sims-brand-text">
+                <h2>SIMS</h2>
+                <p><span>Stock</span> Inventory Management System</p>
+            </div>
+        </div>
+
+        <!-- Hamburger Menu -->
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- Hidden Navigation Menu -->
+        <div class="hidden-nav" id="hiddenNav">
+            <div class="hidden-nav-header">
+                <h3><i class="fas fa-compass"></i> Navigation</h3>
+            </div>
+            <ul>
+                <li data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li data-page="products"><i class="fas fa-box"></i> Products</li>
+                <li data-page="reports"><i class="fas fa-chart-bar"></i> Reports</li>
+                <li class="active" data-page="settings"><i class="fas fa-cog"></i> Settings</li>
+                <li class="logout-item" id="hiddenLogout"><i class="fas fa-sign-out-alt"></i> Logout</li>
+            </ul>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-cubes"></i> SIMS</h2>
+                <p>Inventory Management</p>
+            </div>
+            <ul class="sidebar-nav">
+                <li data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li data-page="products"><i class="fas fa-box"></i> Products</li>
+                <li data-page="reports"><i class="fas fa-chart-bar"></i> Reports</li>
+                <li class="active" data-page="settings"><i class="fas fa-cog"></i> Settings</li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info" id="sidebarUserInfo">
+                    <div class="user-avatar" id="sidebarAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="sidebarUserName">John Doe</span>
+                        <span class="user-email" id="sidebarUserEmail">john@example.com</span>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-title">
+                    <h1 id="pageTitle">Settings</h1>
+                    <p id="welcomeMessage">Configure your preferences</p>
+                </div>
+                <div class="header-actions">
+                    <div class="notification-badge" id="notificationBell">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationCount">3</span>
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-image" id="profileImage">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="#" id="viewProfile"><i class="fas fa-user-circle"></i> My Profile</a>
+                            <a href="#" id="uploadPhoto"><i class="fas fa-camera"></i> Upload Photo</a>
+                            <a href="#" id="goToSettings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#" id="profileLogout" class="logout-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Settings Container -->
+            <div class="settings-container">
+                <!-- Settings Header -->
+                <div class="settings-header">
+                    <div class="settings-header-left">
+                        <div class="settings-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="settings-header-text">
+                            <h2>System Settings</h2>
+                            <p>Manage your application preferences and configurations</p>
+                        </div>
+                    </div>
+                    <div class="settings-header-actions">
+                        <button class="btn-secondary" onclick="resetAllSettings()">
+                            <i class="fas fa-undo"></i> Reset All
+                        </button>
+                        <button class="btn-primary" onclick="saveAllSettings()">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Settings Grid -->
+                <div class="settings-grid">
+                    <!-- Profile Settings Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-user-circle"></i> Profile Information</h3>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="profile-avatar-section">
+                                <div class="profile-avatar-large" id="profileAvatarLarge">
+                                    JD
+                                </div>
+                                <div class="avatar-actions">
+                                    <button class="btn-outline" onclick="changeAvatar()">
+                                        <i class="fas fa-camera"></i> Change
+                                    </button>
+                                    <button class="btn-outline" onclick="removeAvatar()">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Full Name</strong>
+                                        <small>Your display name</small>
+                                    </div>
+                                    <input type="text" class="settings-input" id="profileName" value="John Doe">
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Email Address</strong>
+                                        <small>Used for notifications</small>
+                                    </div>
+                                    <input type="email" class="settings-input" id="profileEmail" value="john@example.com">
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Role</strong>
+                                        <small>Your access level</small>
+                                    </div>
+                                    <input type="text" class="settings-input" value="Administrator" readonly disabled>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Member Since</strong>
+                                    </div>
+                                    <span class="badge-primary" id="memberSince">January 2024</span>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary" style="width: 100%;" onclick="updateProfile()">
+                                <i class="fas fa-check"></i> Update Profile
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-bell"></i> Notifications</h3>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="settings-group">
+                                <h4><i class="fas fa-envelope"></i> Email Notifications</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>System Updates</strong>
+                                        <small>Receive emails about system updates</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="emailUpdates" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Security Alerts</strong>
+                                        <small>Get notified about security events</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="securityAlerts" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Newsletter</strong>
+                                        <small>Product updates and offers</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="newsletter">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4><i class="fas fa-bell"></i> In-App Notifications</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Low Stock Alerts</strong>
+                                        <small>Notify when products are low</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="lowStockAlerts" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>New Orders</strong>
+                                        <small>Alert for new orders</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="newOrders" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>System Alerts</strong>
+                                        <small>Critical system notifications</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="systemAlerts" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-palette"></i> Appearance</h3>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="settings-group">
+                                <h4>Theme</h4>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="theme" value="light" checked> Light
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="theme" value="dark"> Dark
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="theme" value="system"> System
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Primary Color</h4>
+                                <div class="color-picker-group">
+                                    <div class="color-option selected" style="background: #4361ee;" onclick="selectColor(this, '#4361ee')"></div>
+                                    <div class="color-option" style="background: #7209b7;" onclick="selectColor(this, '#7209b7')"></div>
+                                    <div class="color-option" style="background: #06d6a0;" onclick="selectColor(this, '#06d6a0')"></div>
+                                    <div class="color-option" style="background: #ffb703;" onclick="selectColor(this, '#ffb703')"></div>
+                                    <div class="color-option" style="background: #e63946;" onclick="selectColor(this, '#e63946')"></div>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Layout</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Compact Mode</strong>
+                                        <small>Show more items per page</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="compactMode">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Animations</strong>
+                                        <small>Enable UI animations</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="animations" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Font Size</h4>
+                                <select class="settings-select" id="fontSize">
+                                    <option value="small">Small</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="large">Large</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-shield-alt"></i> Security</h3>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="settings-group">
+                                <h4>Authentication</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Two-Factor Authentication</strong>
+                                        <small>Enhance account security</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="twoFactor">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Session Timeout</strong>
+                                        <small>Auto logout after inactivity</small>
+                                    </div>
+                                    <select class="settings-select" id="sessionTimeout">
+                                        <option value="15">15 minutes</option>
+                                        <option value="30" selected>30 minutes</option>
+                                        <option value="60">1 hour</option>
+                                        <option value="120">2 hours</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Password</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Last Changed</strong>
+                                    </div>
+                                    <span class="badge-success">2 weeks ago</span>
+                                </div>
+                                <button class="btn-outline" style="width: 100%; margin-top: 10px;" onclick="changePassword()">
+                                    <i class="fas fa-key"></i> Change Password
+                                </button>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Login History</h4>
+                                <button class="btn-outline" style="width: 100%;" onclick="viewLoginHistory()">
+                                    <i class="fas fa-history"></i> View History
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Management Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-database"></i> Data Management</h3>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="settings-group">
+                                <h4>Storage Usage</h4>
+                                <div class="storage-info">
+                                    <span>Used: 245 MB</span>
+                                    <span>Total: 1 GB</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 24%"></div>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Backup & Restore</h4>
+                                <div class="button-group">
+                                    <button class="btn-primary" onclick="backupData()">
+                                        <i class="fas fa-download"></i> Backup Now
+                                    </button>
+                                    <button class="btn-secondary" onclick="restoreData()">
+                                        <i class="fas fa-upload"></i> Restore
+                                    </button>
+                                </div>
+                                <div class="settings-row" style="margin-top: 15px;">
+                                    <div class="settings-label">
+                                        <strong>Auto Backup</strong>
+                                        <small>Daily automatic backup</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="autoBackup" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Export Options</h4>
+                                <div class="button-group">
+                                    <button class="btn-outline" onclick="exportData('csv')">
+                                        <i class="fas fa-file-csv"></i> CSV
+                                    </button>
+                                    <button class="btn-outline" onclick="exportData('excel')">
+                                        <i class="fas fa-file-excel"></i> Excel
+                                    </button>
+                                    <button class="btn-outline" onclick="exportData('pdf')">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-sliders-h"></i> Preferences</h3>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="settings-group">
+                                <h4>Language & Region</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Language</strong>
+                                    </div>
+                                    <select class="settings-select" id="language">
+                                        <option value="en" selected>English</option>
+                                        <option value="es">Español</option>
+                                        <option value="fr">Français</option>
+                                        <option value="de">Deutsch</option>
+                                    </select>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Time Zone</strong>
+                                    </div>
+                                    <select class="settings-select" id="timezone">
+                                        <option value="UTC-8">Pacific Time (UTC-8)</option>
+                                        <option value="UTC-5" selected>Eastern Time (UTC-5)</option>
+                                        <option value="UTC+0">UTC</option>
+                                        <option value="UTC+1">Central European (UTC+1)</option>
+                                    </select>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Date Format</strong>
+                                    </div>
+                                    <select class="settings-select" id="dateFormat">
+                                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Currency</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Default Currency</strong>
+                                    </div>
+                                    <select class="settings-select" id="currency">
+                                        <option value="USD" selected>USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                        <option value="GBP">GBP (£)</option>
+                                        <option value="JPY">JPY (¥)</option>
+                                    </select>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Show Currency Symbol</strong>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="showCurrency" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Default View</h4>
+                                <div class="radio-group">
+                                    <label class="radio-option">
+                                        <input type="radio" name="defaultView" value="dashboard" checked> Dashboard
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="defaultView" value="products"> Products
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="defaultView" value="reports"> Reports
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-cogs"></i> Advanced</h3>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="settings-card-body">
+                            <div class="settings-group">
+                                <h4>Developer Options</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Debug Mode</strong>
+                                        <small>Enable debug logging</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="debugMode">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>API Access</strong>
+                                        <small>Enable API endpoints</small>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="apiAccess" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>Cache Settings</h4>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Clear Cache</strong>
+                                    </div>
+                                    <button class="btn-outline" onclick="clearCache()">
+                                        <i class="fas fa-trash"></i> Clear
+                                    </button>
+                                </div>
+                                <div class="settings-row">
+                                    <div class="settings-label">
+                                        <strong>Cache Duration</strong>
+                                    </div>
+                                    <select class="settings-select" id="cacheDuration">
+                                        <option value="5">5 minutes</option>
+                                        <option value="15" selected>15 minutes</option>
+                                        <option value="30">30 minutes</option>
+                                        <option value="60">1 hour</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>System Logs</h4>
+                                <button class="btn-outline" style="width: 100%;" onclick="viewLogs()">
+                                    <i class="fas fa-file-alt"></i> View Logs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="danger-zone">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>
+                    <div class="button-group">
+                        <button class="btn-danger" onclick="clearAllData()">
+                            <i class="fas fa-trash-alt"></i> Clear All Data
+                        </button>
+                        <button class="btn-danger" onclick="resetToFactory()">
+                            <i class="fas fa-undo-alt"></i> Factory Reset
+                        </button>
+                        <button class="btn-danger" onclick="deleteAccount()">
+                            <i class="fas fa-user-slash"></i> Delete Account
+                        </button>
+                    </div>
+                    <p style="color: var(--gray-600); font-size: 13px; margin-top: 15px;">
+                        <i class="fas fa-info-circle"></i> These actions are irreversible. Please proceed with caution.
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2024 <span>SIMS</span> — Stock Inventory Management System. Made with <i class="fas fa-heart"></i> for inventory management</p>
+        </footer>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="passwordModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Change Password</h3>
+                <button class="modal-close" onclick="closePasswordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="currentPassword" class="settings-input" style="width: 100%;">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="newPassword" class="settings-input" style="width: 100%;">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirmPassword" class="settings-input" style="width: 100%;">
+                </div>
+                <div class="password-requirements">
+                    <p><i class="fas fa-info-circle"></i> Password must have:</p>
+                    <ul>
+                        <li id="reqLength"><i class="far fa-circle"></i> At least 8 characters</li>
+                        <li id="reqUppercase"><i class="far fa-circle"></i> One uppercase letter</li>
+                        <li id="reqLowercase"><i class="far fa-circle"></i> One lowercase letter</li>
+                        <li id="reqNumber"><i class="far fa-circle"></i> One number</li>
+                    </ul>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closePasswordModal()">Cancel</button>
+                    <button class="btn-primary" onclick="updatePassword()">Update Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast" class="toast hidden"></div>
+
+    <style>
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: modalFade 0.3s ease;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            animation: modalSlide 0.3s ease;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .password-requirements {
+            background: var(--gray-100);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .password-requirements li {
+            margin-bottom: 5px;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .badge-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+
+        .badge-success {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--success-dark);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <script>
+        // ===== GLOBAL VARIABLES =====
+        let selectedTheme = 'light';
+        let selectedPrimaryColor = '#4361ee';
+        let notifications = [
+            { id: 1, title: 'New Update', message: 'System updated successfully', read: false },
+            { id: 2, title: 'Low Stock', message: '5 items running low', read: false },
+            { id: 3, title: 'Backup Complete', message: 'Daily backup completed', read: true }
+        ];
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading overlay after 1 second
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 1000);
+
+            // Load user data
+            loadUserData();
+            
+            // Load saved settings
+            loadSettings();
+            
+            // Update notification badge
+            updateNotificationBadge();
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        // ===== USER DATA =====
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('sims_loggedInUser'));
+            if (user) {
+                document.getElementById('sidebarUserName').textContent = user.fullName;
+                document.getElementById('sidebarUserEmail').textContent = user.email;
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.fullName.split(' ')[0]}!`;
+                
+                const initial = user.fullName.charAt(0).toUpperCase();
+                document.getElementById('sidebarAvatar').innerHTML = `<span>${initial}</span>`;
+                document.getElementById('profileImage').innerHTML = `<span>${initial}</span>`;
+                document.getElementById('profileAvatarLarge').textContent = initial;
+                document.getElementById('profileName').value = user.fullName;
+                document.getElementById('profileEmail').value = user.email;
+            } else {
+                // Demo data
+                document.getElementById('sidebarUserName').textContent = 'John Doe';
+                document.getElementById('sidebarUserEmail').textContent = 'john@example.com';
+                document.getElementById('welcomeMessage').textContent = 'Welcome back, John!';
+            }
+        }
+
+        // ===== SETTINGS FUNCTIONS =====
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('sims_settings')) || {
+                emailUpdates: true,
+                securityAlerts: true,
+                newsletter: false,
+                lowStockAlerts: true,
+                newOrders: true,
+                systemAlerts: true,
+                theme: 'light',
+                primaryColor: '#4361ee',
+                compactMode: false,
+                animations: true,
+                fontSize: 'medium',
+                twoFactor: false,
+                sessionTimeout: '30',
+                autoBackup: true,
+                language: 'en',
+                timezone: 'UTC-5',
+                dateFormat: 'MM/DD/YYYY',
+                currency: 'USD',
+                showCurrency: true,
+                defaultView: 'dashboard',
+                debugMode: false,
+                apiAccess: true,
+                cacheDuration: '15'
+            };
+
+            // Apply settings to UI
+            document.getElementById('emailUpdates').checked = settings.emailUpdates;
+            document.getElementById('securityAlerts').checked = settings.securityAlerts;
+            document.getElementById('newsletter').checked = settings.newsletter;
+            document.getElementById('lowStockAlerts').checked = settings.lowStockAlerts;
+            document.getElementById('newOrders').checked = settings.newOrders;
+            document.getElementById('systemAlerts').checked = settings.systemAlerts;
+            
+            // Theme
+            document.querySelectorAll('input[name="theme"]').forEach(radio => {
+                if (radio.value === settings.theme) radio.checked = true;
+            });
+            
+            selectedPrimaryColor = settings.primaryColor;
+            document.querySelectorAll('.color-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.style.backgroundColor === selectedPrimaryColor) {
+                    opt.classList.add('selected');
+                }
+            });
+            
+            document.getElementById('compactMode').checked = settings.compactMode;
+            document.getElementById('animations').checked = settings.animations;
+            document.getElementById('fontSize').value = settings.fontSize;
+            document.getElementById('twoFactor').checked = settings.twoFactor;
+            document.getElementById('sessionTimeout').value = settings.sessionTimeout;
+            document.getElementById('autoBackup').checked = settings.autoBackup;
+            document.getElementById('language').value = settings.language;
+            document.getElementById('timezone').value = settings.timezone;
+            document.getElementById('dateFormat').value = settings.dateFormat;
+            document.getElementById('currency').value = settings.currency;
+            document.getElementById('showCurrency').checked = settings.showCurrency;
+            
+            document.querySelectorAll('input[name="defaultView"]').forEach(radio => {
+                if (radio.value === settings.defaultView) radio.checked = true;
+            });
+            
+            document.getElementById('debugMode').checked = settings.debugMode;
+            document.getElementById('apiAccess').checked = settings.apiAccess;
+            document.getElementById('cacheDuration').value = settings.cacheDuration;
+
+            // Apply theme
+            if (settings.theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        function saveAllSettings() {
+            const settings = {
+                emailUpdates: document.getElementById('emailUpdates').checked,
+                securityAlerts: document.getElementById('securityAlerts').checked,
+                newsletter: document.getElementById('newsletter').checked,
+                lowStockAlerts: document.getElementById('lowStockAlerts').checked,
+                newOrders: document.getElementById('newOrders').checked,
+                systemAlerts: document.getElementById('systemAlerts').checked,
+                theme: document.querySelector('input[name="theme"]:checked')?.value || 'light',
+                primaryColor: selectedPrimaryColor,
+                compactMode: document.getElementById('compactMode').checked,
+                animations: document.getElementById('animations').checked,
+                fontSize: document.getElementById('fontSize').value,
+                twoFactor: document.getElementById('twoFactor').checked,
+                sessionTimeout: document.getElementById('sessionTimeout').value,
+                autoBackup: document.getElementById('autoBackup').checked,
+                language: document.getElementById('language').value,
+                timezone: document.getElementById('timezone').value,
+                dateFormat: document.getElementById('dateFormat').value,
+                currency: document.getElementById('currency').value,
+                showCurrency: document.getElementById('showCurrency').checked,
+                defaultView: document.querySelector('input[name="defaultView"]:checked')?.value || 'dashboard',
+                debugMode: document.getElementById('debugMode').checked,
+                apiAccess: document.getElementById('apiAccess').checked,
+                cacheDuration: document.getElementById('cacheDuration').value
+            };
+
+            localStorage.setItem('sims_settings', JSON.stringify(settings));
+            
+            // Apply theme
+            if (settings.theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+
+            showToast('Settings saved successfully!', 'success');
+        }
+
+        function resetAllSettings() {
+            if (confirm('Are you sure you want to reset all settings to default?')) {
+                localStorage.removeItem('sims_settings');
+                loadSettings();
+                showToast('Settings reset to default', 'info');
+            }
+        }
+
+        // ===== COLOR PICKER =====
+        function selectColor(element, color) {
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedPrimaryColor = color;
+            
+            // Preview color change
+            document.documentElement.style.setProperty('--primary', color);
+        }
+
+        // ===== PROFILE FUNCTIONS =====
+        function updateProfile() {
+            const name = document.getElementById('profileName').value;
+            const email = document.getElementById('profileEmail').value;
+            
+            // Update in localStorage
+            const user = JSON.parse(localStorage.getItem('sims_loggedInUser')) || {};
+            user.fullName = name;
+            user.email = email;
+            localStorage.setItem('sims_loggedInUser', JSON.stringify(user));
+            
+            // Update UI
+            document.getElementById('sidebarUserName').textContent = name;
+            document.getElementById('sidebarUserEmail').textContent = email;
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${name.split(' ')[0]}!`;
+            
+            const initial = name.charAt(0).toUpperCase();
+            document.getElementById('sidebarAvatar').innerHTML = `<span>${initial}</span>`;
+            document.getElementById('profileImage').innerHTML = `<span>${initial}</span>`;
+            document.getElementById('profileAvatarLarge').textContent = initial;
+            
+            showToast('Profile updated successfully!', 'success');
+        }
+
+        function changeAvatar() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const avatarUrl = e.target.result;
+                    document.getElementById('sidebarAvatar').innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
+                    document.getElementById('profileImage').innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
+                    document.getElementById('profileAvatarLarge').innerHTML = `<img src="${avatarUrl}" alt="Avatar">`;
+                    showToast('Avatar updated successfully!', 'success');
+                };
+                
+                reader.readAsDataURL(file);
+            };
+            
+            input.click();
+        }
+
+        function removeAvatar() {
+            const user = JSON.parse(localStorage.getItem('sims_loggedInUser')) || { fullName: 'User' };
+            const initial = user.fullName.charAt(0).toUpperCase();
+            
+            document.getElementById('sidebarAvatar').innerHTML = `<span>${initial}</span>`;
+            document.getElementById('profileImage').innerHTML = `<span>${initial}</span>`;
+            document.getElementById('profileAvatarLarge').textContent = initial;
+            
+            showToast('Avatar removed', 'info');
+        }
+
+        // ===== PASSWORD FUNCTIONS =====
+        function changePassword() {
+            document.getElementById('passwordModal').classList.remove('hidden');
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        function updatePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            
+            if (!current || !newPass || !confirm) {
+                showToast('All fields are required', 'error');
+                return;
+            }
+            
+            if (newPass !== confirm) {
+                showToast('New passwords do not match', 'error');
+                return;
+            }
+            
+            if (newPass.length < 8) {
+                showToast('Password must be at least 8 characters', 'error');
+                return;
+            }
+            
+            if (!/[A-Z]/.test(newPass)) {
+                showToast('Password must contain an uppercase letter', 'error');
+                return;
+            }
+            
+            if (!/[a-z]/.test(newPass)) {
+                showToast('Password must contain a lowercase letter', 'error');
+                return;
+            }
+            
+            if (!/[0-9]/.test(newPass)) {
+                showToast('Password must contain a number', 'error');
+                return;
+            }
+            
+            // Update password in localStorage
+            const users = JSON.parse(localStorage.getItem('sims_users')) || [];
+            const user = JSON.parse(localStorage.getItem('sims_loggedInUser'));
+            
+            if (user) {
+                const userIndex = users.findIndex(u => u.email === user.email);
+                if (userIndex !== -1) {
+                    if (users[userIndex].password !== current) {
+                        showToast('Current password is incorrect', 'error');
+                        return;
+                    }
+                    users[userIndex].password = newPass;
+                    localStorage.setItem('sims_users', JSON.stringify(users));
+                }
+            }
+            
+            closePasswordModal();
+            showToast('Password updated successfully!', 'success');
+        }
+
+        // ===== DATA MANAGEMENT FUNCTIONS =====
+        function backupData() {
+            const data = {
+                products: JSON.parse(localStorage.getItem('sims_products')) || [],
+                users: JSON.parse(localStorage.getItem('sims_users')) || [],
+                settings: JSON.parse(localStorage.getItem('sims_settings')) || {},
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `sims_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            
+            showToast('Backup created successfully!', 'success');
+        }
+
+        function restoreData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        if (data.products) localStorage.setItem('sims_products', JSON.stringify(data.products));
+                        if (data.users) localStorage.setItem('sims_users', JSON.stringify(data.users));
+                        if (data.settings) localStorage.setItem('sims_settings', JSON.stringify(data.settings));
+                        
+                        showToast('Data restored successfully! Refresh the page.', 'success');
+                        setTimeout(() => location.reload(), 2000);
+                    } catch (error) {
+                        showToast('Invalid backup file', 'error');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        function exportData(format) {
+            const products = JSON.parse(localStorage.getItem('sims_products')) || [];
+            
+            if (format === 'csv') {
+                let csv = 'ID,Name,Category,Quantity,Price,Status\n';
+                products.forEach(p => {
+                    csv += `${p.id},${p.name},${p.category},${p.quantity},${p.price},${p.quantity > 0 ? 'In Stock' : 'Out of Stock'}\n`;
+                });
+                
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `products_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+            } else {
+                const data = JSON.stringify(products, null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `products_${new Date().toISOString().slice(0,10)}.${format === 'excel' ? 'xlsx' : 'json'}`;
+                a.click();
+            }
+            
+            showToast(`Data exported as ${format.toUpperCase()}`, 'success');
+        }
+
+        function viewLoginHistory() {
+            showToast('Login history feature coming soon', 'info');
+        }
+
+        function viewLogs() {
+            showToast('System logs feature coming soon', 'info');
+        }
+
+        function clearCache() {
+            showToast('Cache cleared successfully!', 'success');
+        }
+
+        // ===== DANGER ZONE FUNCTIONS =====
+        function clearAllData() {
+            if (confirm('⚠️ WARNING: This will delete ALL your data. This action cannot be undone. Are you sure?')) {
+                localStorage.removeItem('sims_products');
+                localStorage.removeItem('sims_notifications');
+                showToast('All data cleared', 'info');
+            }
+        }
+
+        function resetToFactory() {
+            if (confirm('⚠️ WARNING: This will reset the application to factory settings. All your data will be lost. Continue?')) {
+                localStorage.clear();
+                showToast('Factory reset complete. Redirecting to login...', 'info');
+                setTimeout(() => window.location.href = 'login.html', 2000);
+            }
+        }
+
+        function deleteAccount() {
+            if (confirm('⚠️ WARNING: This will permanently delete your account. This action cannot be undone. Continue?')) {
+                const user = JSON.parse(localStorage.getItem('sims_loggedInUser'));
+                if (user) {
+                    const users = JSON.parse(localStorage.getItem('sims_users')) || [];
+                    const filteredUsers = users.filter(u => u.email !== user.email);
+                    localStorage.setItem('sims_users', JSON.stringify(filteredUsers));
+                    localStorage.removeItem('sims_loggedInUser');
+                    showToast('Account deleted. Redirecting...', 'info');
+                    setTimeout(() => window.location.href = 'register.html', 2000);
+                }
+            }
+        }
+
+        // ===== NOTIFICATION FUNCTIONS =====
+        function updateNotificationBadge() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            document.getElementById('notificationCount').textContent = unreadCount;
+        }
+
+        // ===== TOAST NOTIFICATION =====
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // ===== NAVIGATION =====
+        function setupEventListeners() {
+            // Menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const hiddenNav = document.getElementById('hiddenNav');
+            const sidebar = document.getElementById('sidebar');
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                    if (hiddenNav) hiddenNav.classList.toggle('show');
+                    if (sidebar) sidebar.classList.toggle('show');
+                });
+            }
+
+            // Navigation links
+            document.querySelectorAll('[data-page]').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    if (page === 'logout') {
+                        logout();
+                    } else {
+                        window.location.href = `${page}.html`;
+                    }
+                });
+            });
+
+            // Profile dropdown
+            const profileDropdown = document.getElementById('profileDropdown');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (profileDropdown && dropdownMenu) {
+                profileDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+            }
+
+            // Close menus on outside click
+            document.addEventListener('click', function(e) {
+                if (hiddenNav && !e.target.closest('.menu-toggle') && !e.target.closest('.hidden-nav')) {
+                    hiddenNav.classList.remove('show');
+                    if (menuToggle) menuToggle.classList.remove('active');
+                }
+                if (dropdownMenu && !e.target.closest('.profile-dropdown')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+
+            // Profile menu items
+            document.getElementById('viewProfile')?.addEventListener('click', e => e.preventDefault());
+            document.getElementById('uploadPhoto')?.addEventListener('click', changeAvatar);
+            document.getElementById('goToSettings')?.addEventListener('click', () => {
+                window.location.href = 'settings.html';
+            });
+            document.getElementById('profileLogout')?.addEventListener('click', logout);
+            document.getElementById('hiddenLogout')?.addEventListener('click', logout);
+            document.getElementById('logoutBtn')?.addEventListener('click', logout);
+
+            // Theme radio change
+            document.querySelectorAll('input[name="theme"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'dark') {
+                        document.body.classList.add('dark-mode');
+                    } else {
+                        document.body.classList.remove('dark-mode');
+                    }
+                });
+            });
+        }
+
+        function logout() {
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+            document.querySelector('.loading-text').textContent = 'Logging out...';
+            
+            setTimeout(() => {
+                localStorage.removeItem('sims_loggedInUser');
+                window.location.href = 'login.html';
+            }, 1000);
+        }
+
+        // Password strength checker for modal
+        document.getElementById('newPassword')?.addEventListener('input', function() {
+            const password = this.value;
+            
+            document.getElementById('reqLength').innerHTML = (password.length >= 8 ? '<i class="fas fa-check-circle" style="color: #27ae60"></i>' : '<i class="far fa-circle"></i>') + ' At least 8 characters';
+            document.getElementById('reqUppercase').innerHTML = (/[A-Z]/.test(password) ? '<i class="fas fa-check-circle" style="color: #27ae60"></i>' : '<i class="far fa-circle"></i>') + ' One uppercase letter';
+            document.getElementById('reqLowercase').innerHTML = (/[a-z]/.test(password) ? '<i class="fas fa-check-circle" style="color: #27ae60"></i>' : '<i class="far fa-circle"></i>') + ' One lowercase letter';
+            document.getElementById('reqNumber').innerHTML = (/[0-9]/.test(password) ? '<i class="fas fa-check-circle" style="color: #27ae60"></i>' : '<i class="far fa-circle"></i>') + ' One number';
+        });
+    </script>
+</body>
+</html>

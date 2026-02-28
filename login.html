@@ -6,61 +6,244 @@
     <title>Login - SIMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles for login page */
+        .auth-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .auth-container {
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--gray-200);
+        }
+
+        .auth-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .auth-container::-webkit-scrollbar-track {
+            background: var(--gray-200);
+            border-radius: 10px;
+        }
+
+        .auth-container::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .auth-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        .floating-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: float1 20s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -200px;
+            left: -200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: float2 25s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, 30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-30px, -30px) rotate(-120deg); }
+            66% { transform: translate(20px, -20px) rotate(-240deg); }
+        }
+    </style>
 </head>
 <body class="auth-page">
+    <!-- Floating Background Shapes -->
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
+    <div id="loadingOverlay" class="loading-overlay">
         <div class="facebook-loader">
             <div></div>
             <div></div>
             <div></div>
         </div>
+        <div class="loading-text">Please wait...</div>
     </div>
 
     <!-- Login Container -->
     <div class="auth-container">
         <div class="auth-header">
-            <i class="fas fa-cubes"></i>
-            <h1>SIMS</h1>
+            <div class="auth-logo">
+                <i class="fas fa-cubes"></i>
+            </div>
+            <h1 class="gradient-text">SIMS</h1>
             <p>Stock Inventory Management System</p>
         </div>
+        
         <div class="auth-body">
-            <h2>Welcome Back</h2>
-            <p class="auth-subtitle">Sign in to continue</p>
+            <div class="auth-welcome">
+                <h2>Welcome Back! 👋</h2>
+                <p class="auth-subtitle">Sign in to continue to your dashboard</p>
+            </div>
             
             <div id="errorMessage" class="message hidden">
                 <i class="fas fa-exclamation-circle"></i>
                 <span id="errorText"></span>
             </div>
             
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="loginEmail" placeholder="Email Address">
-            </div>
-            
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="loginPassword" placeholder="Password">
-            </div>
-            
-            <div class="form-options">
-                <label class="checkbox">
-                    <input type="checkbox" id="rememberMe"> Remember me
-                </label>
-                <a href="#" class="forgot-link">Forgot Password?</a>
-            </div>
-            
-            <button class="btn-primary" id="loginBtn">
-                <span>Login</span>
-                <i class="fas fa-sign-in-alt"></i>
-            </button>
+            <form id="loginForm" class="auth-form">
+                <div class="input-group animate-input">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder=" " required>
+                    <label>Email Address</label>
+                    <div class="input-border"></div>
+                </div>
+                
+                <div class="input-group animate-input">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder=" " required>
+                    <label>Password</label>
+                    <div class="input-border"></div>
+                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link" onclick="showToast('Password reset coming soon', 'info'); return false;">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="loginBtn">
+                    <span>Sign In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
             
             <div class="auth-footer">
-                Don't have an account? 
-                <a href="register.html">Create Account</a>
+                <p>Don't have an account? <a href="register.html">Create Account</a></p>
+            </div>
+            
+            <div class="auth-divider">
+                <span>or continue with</span>
+            </div>
+            
+            <div class="social-login">
+                <button class="social-btn google" onclick="showToast('Google login coming soon', 'info')">
+                    <i class="fab fa-google"></i>
+                </button>
+                <button class="social-btn github" onclick="showToast('GitHub login coming soon', 'info')">
+                    <i class="fab fa-github"></i>
+                </button>
+                <button class="social-btn microsoft" onclick="showToast('Microsoft login coming soon', 'info')">
+                    <i class="fab fa-microsoft"></i>
+                </button>
             </div>
         </div>
     </div>
+
+    <script>
+        // Password visibility toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = event.currentTarget.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showMessage('errorMessage', 'All fields are required');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('sims_users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                showMessage('errorMessage', 'Invalid email or password');
+                return;
+            }
+            
+            showLoading('Logging in...');
+            
+            setTimeout(() => {
+                localStorage.setItem('sims_loggedInUser', JSON.stringify({ 
+                    fullName: user.fullName, 
+                    email: user.email,
+                    id: user.id 
+                }));
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        });
+
+        // Show message function
+        function showMessage(elementId, message, isSuccess = false) {
+            const msgElement = document.getElementById(elementId);
+            if (!msgElement) return;
+            
+            const textSpan = msgElement.querySelector('span');
+            textSpan.textContent = message;
+            
+            msgElement.classList.remove('hidden', 'success');
+            if (isSuccess) msgElement.classList.add('success');
+        }
+
+        // Show loading function
+        function showLoading(message) {
+            const overlay = document.getElementById('loadingOverlay');
+            const textEl = overlay.querySelector('.loading-text');
+            textEl.textContent = message;
+            overlay.classList.remove('hidden');
+        }
+
+        // Show toast function (to be implemented in script.js)
+        function showToast(message, type) {
+            // This will be handled by the main script.js
+            console.log(message, type);
+        }
+    </script>
 
     <script src="script.js"></script>
 </body>
